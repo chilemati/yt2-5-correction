@@ -69,77 +69,16 @@ if (options === "1") {
       );
       switch (transaction) {
         case "1":
-          let confirmPin = prompt("Please Confirm Your Pin");
-          if (bankDatabase[cardNumber].accountPin === confirmPin) {
-            // if the user confirms the pin, display the accountBalance of the user
-            alert(
-              `Your Account Balance: ${bankDatabase[cardNumber].accountBalance}`
-            );
-          } else if (confirmPin === null) {
-            alert(
-              "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
-            );
-          } else {
-            // if the pinEntered is incorrect, display an error message
-            alert("Invalid Pin!\n Please reload the page to try again");
-          }
+          checkBalance(cardNumber);
           break;
         case "2":
-          confirmPin = prompt("Please Confirm Your Pin");
-          if (bankDatabase[cardNumber].accountPin === confirmPin) {
-            // if the user confirms the pin, prompt user to enter withdrawAmount and store the response in a variable called withdrawAmount
-            let withdrawAmount = prompt("Enter Withdrawal Amount");
-            if (bankDatabase[cardNumber].accountBalance >= withdrawAmount) {
-              // if the accountBalance is greater than or equal to the withdrawAmount, deduct the withdrawAmount from the accountBalance
-              bankDatabase[cardNumber].accountBalance =
-                parseInt(bankDatabase[cardNumber].accountBalance) -
-                parseInt(withdrawAmount);
-              // store the bankDatabase in the localStorage
-              saveBankDatabase();
-              // display a success message
-              alert(
-                `Withdrawal Successful!\n Your New Account Balance: ${bankDatabase[cardNumber].accountBalance}`
-              );
-            } else {
-              // if the accountBalance is less than the withdrawAmount, display an error message
-              alert(
-                "Insufficient Balance!\n Please reload the page to try again"
-              );
-            }
-          } else if (confirmPin === null) {
-            alert(
-              "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
-            );
-          } else {
-            // if the pinEntered is incorrect, display an error message
-            alert("Invalid Pin!\n Please reload the page to try again");
-          }
+          withdraw(cardNumber);
           break;
         case "3":
-          confirmPin = prompt("Please Confirm Your Pin");
-          if (bankDatabase[cardNumber].accountPin === confirmPin) {
-            // if the user confirms the pin, prompt user to enter depositAmount and store the response in a variable called depositAmount
-            let depositAmount = prompt("Enter Deposit Amount");
-            bankDatabase[cardNumber].accountBalance =
-              parseInt(bankDatabase[cardNumber].accountBalance) +
-              parseInt(depositAmount);
-            // store the bankDatabase in the localStorage
-            saveBankDatabase();
-            // display a success message
-            alert(
-              `Deposit Successful!\n Your New Account Balance: ${bankDatabase[cardNumber].accountBalance}`
-            );
-          } else if (confirmPin === null) {
-            alert(
-              "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
-            );
-          } else {
-            // if the pinEntered is incorrect, display an error message
-            alert("Invalid Pin!\n Please reload the page to try again");
-          }
+          deposit(cardNumber);
           break;
         case "4":
-          transfer();
+          transfer(cardNumber);
           break;
         case "5":
           alert(
@@ -215,9 +154,84 @@ function createNewAccount() {
 }
 //end of createNewAccount function
 
+// Function to check account balance
+function checkBalance(cardNumber) {
+  let confirmPin = prompt("Please Confirm Your Pin");
+  if (bankDatabase[cardNumber].accountPin === confirmPin) {
+    // if the user confirms the pin, display the accountBalance of the user
+    alert(`Your Account Balance: ${bankDatabase[cardNumber].accountBalance}`);
+  } else if (confirmPin === null) {
+    alert(
+      "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
+    );
+  } else {
+    // if the pinEntered is incorrect, display an error message
+    alert("Invalid Pin!\n Please reload the page to try again");
+  }
+}
+//end of checkBalance function
+
+// function to withdraw money
+function withdraw(cardNumber) {
+  let confirmPin = prompt("Please Confirm Your Pin");
+  if (bankDatabase[cardNumber].accountPin === confirmPin) {
+    // if the user confirms the pin, prompt user to enter withdrawAmount and store the response in a variable called withdrawAmount
+    let withdrawAmount = prompt("Enter Withdrawal Amount");
+    if (bankDatabase[cardNumber].accountBalance >= withdrawAmount) {
+      // if the accountBalance is greater than or equal to the withdrawAmount, deduct the withdrawAmount from the accountBalance
+      bankDatabase[cardNumber].accountBalance =
+        parseInt(bankDatabase[cardNumber].accountBalance) -
+        parseInt(withdrawAmount);
+      // store the bankDatabase in the localStorage
+      saveBankDatabase();
+      // display a success message
+      alert(
+        `Withdrawal Successful!\n Your New Account Balance: ${bankDatabase[cardNumber].accountBalance}`
+      );
+    } else {
+      // if the accountBalance is less than the withdrawAmount, display an error message
+      alert("Insufficient Balance!\n Please reload the page to try again");
+    }
+  } else if (confirmPin === null) {
+    alert(
+      "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
+    );
+  } else {
+    // if the pinEntered is incorrect, display an error message
+    alert("Invalid Pin!\n Please reload the page to try again");
+  }
+}
+//end of withdraw function
+
+// Function to deposit money
+function deposit(cardNumber) {
+  let confirmPin = prompt("Please Confirm Your Pin");
+  if (bankDatabase[cardNumber].accountPin === confirmPin) {
+    // if the user confirms the pin, prompt user to enter depositAmount and store the response in a variable called depositAmount
+    let depositAmount = prompt("Enter Deposit Amount");
+    bankDatabase[cardNumber].accountBalance =
+      parseInt(bankDatabase[cardNumber].accountBalance) +
+      parseInt(depositAmount);
+    // store the bankDatabase in the localStorage
+    saveBankDatabase();
+    // display a success message
+    alert(
+      `Deposit Successful!\n Your New Account Balance: ${bankDatabase[cardNumber].accountBalance}`
+    );
+  } else if (confirmPin === null) {
+    alert(
+      "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
+    );
+  } else {
+    // if the pinEntered is incorrect, display an error message
+    alert("Invalid Pin!\n Please reload the page to try again");
+  }
+}
+//end of deposit function
+
 // Function to transfer money
-function transfer() {
-  confirmPin = prompt("Please Confirm Your Pin");
+function transfer(cardNumber) {
+  let confirmPin = prompt("Please Confirm Your Pin");
   if (bankDatabase[cardNumber].accountPin === confirmPin) {
     // prompt user to enter transferAmount and store the response in a variable called transferAmount
     let transferAmount = prompt("Enter Transfer Amount");
@@ -261,3 +275,4 @@ function transfer() {
     alert("Invalid Pin!\n Please reload the page to try again");
   }
 }
+//end of transfer function
