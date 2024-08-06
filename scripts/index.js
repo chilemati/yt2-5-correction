@@ -248,6 +248,11 @@ function transfer(cardNumber) {
         "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
       );
     } else {
+      //Confirm transfer and pin
+      let confirmTransfer = confirm(
+        `You are about to transfer ${transferAmount} to ${bankDatabase[transferAccountNumber].accountName} with Account number: ${bankDatabase[transferAccountNumber].accountNumber}\n Please Confirm`
+      );
+      console.log(confirmTransfer);
       // if transferAccountNumber is in the bankDatabase, deduct the transferAmount from the user's accountBalance
       bankDatabase[cardNumber].accountBalance =
         parseInt(bankDatabase[cardNumber].accountBalance) -
