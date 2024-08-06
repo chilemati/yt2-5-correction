@@ -243,33 +243,61 @@ function transfer(cardNumber) {
     if (bankDatabase[transferAccountNumber] === undefined) {
       // if transferAccountNumber is not in the bankDatabase, display an error message
       alert("Invalid Account Number!\n Please reload the page to try again");
+    } else if (bankDatabase[transferAccountNumber]) {
+      //check if the transferAmount is less than the accountBalance
+      if (bankDatabase[cardNumber].accountBalance < transferAmount) {
+        // if the accountBalance is less than the transferAmount, display an error message
+        alert("Insufficient Balance!\n Please reload the page to try again");
+      } else {
+        //Confirm transfer and pin
+        let confirmTransfer = confirm(
+          `You are about to transfer ${transferAmount} to ${bankDatabase[transferAccountNumber].accountName} with Account number: ${bankDatabase[transferAccountNumber].accountNumber}\n Please Confirm`
+        );
+
+        // if the user confirms the transfer, deduct the transferAmount from the accountBalance
+        if (confirmTransfer) {
+          let authorizedPin = prompt("Please Authorize Transfer with Pin");
+          if (bankDatabase[cardNumber].accountPin === authorizedPin) {
+            // if transferAccountNumber is in the bankDatabase, deduct the transferAmount from the user's accountBalance
+            bankDatabase[cardNumber].accountBalance =
+              parseInt(bankDatabase[cardNumber].accountBalance) -
+              parseInt(transferAmount);
+
+            // add the transferAmount to the transferAccountNumber's accountBalance
+            bankDatabase[transferAccountNumber].accountBalance =
+              parseInt(bankDatabase[transferAccountNumber].accountBalance) +
+              parseInt(transferAmount);
+
+            // store the bankDatabase in the localStorage
+            saveBankDatabase();
+
+            // display a success message
+            alert(
+              `You've Transfered ${transferAmount} Successfully to ${bankDatabase[transferAccountNumber].accountName}!\n Your New Account Balance: ${bankDatabase[cardNumber].accountBalance}`
+            );
+          } else if (authorizedPin === null) {
+            alert(
+              "Transaction cancelled!!!\n Would you like to carry out another transaction? Reload the page to start again"
+            );
+          } else if (authorizedPin === undefined) {
+            alert(
+              "Invalid Pin Entered!!!\n Would you like to carry out another transaction? Reload the page to start again"
+            );
+          } else {
+            // if the pinEntered is incorrect, display an error message
+            alert("Invalid Pin!\n Please reload the page to try again");
+          }
+        } else {
+          alert("Transfer Cancelled!\n Please reload the page to try again");
+        }
+      }
     } else if (bankDatabase[transferAccountNumber] === null) {
       alert(
         "Thank you for Using our ATM! Goodbye\n Would you like to carry out another transaction? Reload the page to start again"
       );
     } else {
-      //Confirm transfer and pin
-      let confirmTransfer = confirm(
-        `You are about to transfer ${transferAmount} to ${bankDatabase[transferAccountNumber].accountName} with Account number: ${bankDatabase[transferAccountNumber].accountNumber}\n Please Confirm`
-      );
-      console.log(confirmTransfer);
-      // if transferAccountNumber is in the bankDatabase, deduct the transferAmount from the user's accountBalance
-      bankDatabase[cardNumber].accountBalance =
-        parseInt(bankDatabase[cardNumber].accountBalance) -
-        parseInt(transferAmount);
-
-      // add the transferAmount to the transferAccountNumber's accountBalance
-      bankDatabase[transferAccountNumber].accountBalance =
-        parseInt(bankDatabase[transferAccountNumber].accountBalance) +
-        parseInt(transferAmount);
-
-      // store the bankDatabase in the localStorage
-      saveBankDatabase();
-
-      // display a success message
-      alert(
-        `Transfer Successful!\n Your New Account Balance: ${bankDatabase[cardNumber].accountBalance}`
-      );
+      // if the transferAccountNumber is incorrect, display an error message
+      alert("Invalid Account Number!\n Please reload the page to try again");
     }
   } else if (confirmPin === null) {
     alert(
